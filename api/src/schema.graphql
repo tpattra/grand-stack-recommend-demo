@@ -1,38 +1,53 @@
 type User {
-  id: ID!
+  userId: String
   name: String
-  friends: [User] @relation(name: "FRIENDS", direction: "BOTH")
-  reviews: [Review] @relation(name: "WROTE", direction: "OUT")
-  avgStars: Float
+
+  findUserByName(substring: String): [User]
     @cypher(
-      statement: "MATCH (this)-[:WROTE]->(r:Review) RETURN toFloat(avg(r.stars))"
+      statement: "MATCH (u:User) WHERE toLower(u.name) =~ toLower( .*$substring.* ) RETURN movie"
     )
-  numReviews: Int
-    @cypher(statement: "MATCH (this)-[:WROTE]->(r:Review) RETURN COUNT(r)")
 }
 
-type Business {
-  id: ID!
+ type Movie {
+  movieId: ID!
+  title: String
+  genres: [String]
+  year: Int
+  poster: String
+  plot: String
+  imdbRating: Float
+
+  findMovieByTitle(title: String): [Movie]
+    @cypher(
+    statement: "MATCH (m:Movie) WHERE toLower(m.title) =~ toLower( .*$title.* ) RETURN movie"
+  )
+
+  findRecommendedMovies(movieId: String, limit: Int): [Movie]
+    @cypher(
+      statement: "MATCH (m:Movie {movieId: $movieId})-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(movie:Movie)
+                  WITH m, movie, COUNT(*) AS genreOverlap
+                  MATCH (m)<-[:RATED]-(:User)-[r:RATED]->(movie:Movie)
+                  WHERE r.rating > 3
+                  WITH movie,genreOverlap, COUNT(*) AS userRatedScore
+                  RETURN movie ORDER BY (0.5 * genreOverlap) + (0.5 * userRatedScore)  DESC LIMIT $limit;"
+    )
+
+
+}
+
+type Director
+{
   name: String
-  address: String
-  city: String
-  state: String
-  reviews: [Review] @relation(name: "REVIEWS", direction: "IN")
-  categories: [Category] @relation(name: "IN_CATEGORY", direction: "OUT")
 }
 
-type Review {
-  id: ID!
-  stars: Int
-  text: String
-  date: Date
-  business: Business @relation(name: "REVIEWS", direction: "OUT")
-  user: User @relation(name: "WROTE", direction: "IN")
+type Actor
+{
+  name: String
 }
 
-type Category {
-  name: ID!
-  businesses: [Business] @relation(name: "IN_CATEGORY", direction: "IN")
+type Genre
+{
+  name: String
 }
 
 type Query {
