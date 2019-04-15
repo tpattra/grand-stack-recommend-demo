@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+api/.DS_Store
+api/node_modules/
+api/src/.DS_Store
