@@ -1,9 +1,24 @@
 import React, { Component } from "react";
 import "./App.css";
-import UserList from "./UserList";
+import Search from "./Search";
+import MovieList from "./MovieList";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.title
+    };
+  }
+
+  searchMovie = title => {
+    this.setState({ title });
+    console.log("serchMovie called");
+  };
+
   render() {
+    const { title } = this.state;
+
     return (
       <div className="App">
         <header className="App-header">
@@ -12,10 +27,11 @@ class App extends Component {
             className="App-logo"
             alt="logo"
           />
-          <h1 className="App-title">Welcome to GRANDstack</h1>
+          <h1 className="App-title">Pattra's GRANDstack demo</h1>
         </header>
 
-        <UserList />
+        <Search searchMovie={this.searchMovie} title={title} />
+        <MovieList />
       </div>
     );
   }

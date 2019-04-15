@@ -1,5 +1,16 @@
+
 {
   "version": 2,
-  "builds": [{ "src": "src/index.js", "use": "@now/node-server" }],
-  "routes": [{ "src": "src/", "dest": "index.js" }]
+  "builds": [
+    { "src": "/src/index.js", "use": "@now/node-server" }
+  ],
+  "routes": [
+    { "src": "/.*", "dest": "/api/src/index.js" }
+  ],
+  "env": {
+    "NEO4J_URI": "bolt://34.229.254.166:33563",
+    "NEO4J_USER": "neo4j",
+    "NEO4J_PASSWORD": "phase-principal-rubber",
+    "GRAPHQL_LISTEN_PORT": "4000"
+  }
 }
