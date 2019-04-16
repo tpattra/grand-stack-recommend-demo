@@ -13,7 +13,6 @@ class App extends Component {
 
   searchMovie = title => {
     this.setState({ title });
-    console.log("serchMovie called");
   };
 
   render() {
@@ -27,7 +26,7 @@ class App extends Component {
             className="App-logo"
             alt="logo"
           />
-          <h1 className="App-title">Pattra's GRANDstack demo</h1>
+          <h1 className="App-title">Movies Recommendation GRANDstack Demo</h1>
         </header>
 
         <Search searchMovie={this.searchMovie} title={title} />

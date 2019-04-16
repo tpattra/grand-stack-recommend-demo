@@ -11,7 +11,10 @@ Neo4j, GraphQL, Apollo, and React
 **Others**
 Zeit Now: Using for deploy node server for the API and the application itself.
 UI: Using reatc libraries such as Sematic UI React
-Neo4j database: Using Neo4j sandbox that comes with the prompt movies dataset. Please note that the prompt dataset for movies' posters are not valid any more since the host moved to use AWS instead. So the posters' urls have been modified.
+Neo4j database: Using Neo4j sandbox that comes with the prompt movies dataset. 
+
+(Please note that the prompt values for movies' posters are not valid due to IMDB licensing those images. The images from OMDb API are used instead ( see http://www.omdbapi.com/ ).
+
 
 
 #### This project is still working in progress.
