@@ -1,17 +1,15 @@
 type User {
-  userId: String
-  name: String
-
-  findUserByName(substring: String): [User]
-    @cypher(
-      statement: "MATCH (u:User) WHERE toLower(u.name) =~ toLower( .*$substring.* ) RETURN movie"
-    )
+  userId: ID!
+  name: String!
 }
 
  type Movie {
   movieId: ID!
-  title: String
-  genres: [Genre]
+  title: String!
+  genres: [String!]
+   @cypher(
+     statement: "MATCH (this)-[:IN_GENRE]->(g:Genre) RETURN Collect(g.name)"
+   )
   year: Int
   poster: String
   plot: String
@@ -26,31 +24,34 @@ type User {
                          WHERE r2.rating >= 3
                          RETURN m, sum(r2.rating) as ratings ORDER BY ratings DESC"""
       )
-
-  findMovieByTitle(title: String): [Movie]
-    @cypher(
-    statement: "MATCH (m:Movie) WHERE toLower(m.title) =~ toLower( .*$title.* ) RETURN movie"
-  )
 }
 
 type Director
 {
-  name: String
+  name: String!
 }
 
 type Actor
 {
-  name: String
+  name: String!
 }
 
 type Genre
 {
-  name: String
+  name: String!
 }
 
 type Query {
-  usersBySubstring(substring: String): [User]
+
+  movies: [Movie!]!
+  movie(title: String): [Movie]
     @cypher(
-      statement: "MATCH (u:User) WHERE u.name CONTAINS $substring RETURN u"
+    statement: "MATCH (m:Movie) WHERE toLower(m.title) CONTAINS toLower( $title ) RETURN m"
     )
+  
+  findUserByName(substring: String): [User]
+    @cypher(
+      statement: "MATCH (u:User) WHERE toLower(u.name) =~ toLower( .*$substring.* ) RETURN movie"
+    )
+
 }
